@@ -25,3 +25,17 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+/* div[contenteditable] {
+  width: 500px;
+  height: 70px;
+} */
+
+div[contenteditable][placeholder]:empty:before {
+  content: attr(placeholder);
+  color: #555; 
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
