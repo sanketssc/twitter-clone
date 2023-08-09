@@ -171,8 +171,8 @@ const Post = ({ post, profile, author, bookmarked, liked, retweeted }) => {
               className="w-10 h-10 rounded-full"
               src={author.image}
               alt=""
-              width={10}
-              height={10}
+              width={200}
+              height={200}
             />
           </Link>
         </div>
