@@ -54,8 +54,8 @@ const ProfilePage = ({ profile, userPosts, sessionUser }) => {
                 <Image
                   src={profile.image}
                   className=" w-full h-full object-cover"
-                  width={100}
-                  height={100}
+                  width={300}
+                  height={300}
                   alt=""
                 />
               </div>
