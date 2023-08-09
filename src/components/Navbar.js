@@ -25,6 +25,16 @@ const Navbar = async () => {
     },
   });
 
+  if(!profile) {
+    return (
+        <Link className="hidden text-4xl xs:flex justify-between items-center px-5 py-5" href={`/`}>
+              <div className="flex gap-2 ">
+                  <BsTwitter className="" />
+                  </div>
+          </Link>
+      )
+  }
+
   return (
       <NavbarContent profile={profile} />
 
