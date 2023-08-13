@@ -1,7 +1,12 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BiHomeCircle, BiSolidHomeCircle, BiSolidSearch, BiSearch } from "react-icons/bi";
+import {
+  BiHomeCircle,
+  BiSolidHomeCircle,
+  BiSolidSearch,
+  BiSearch,
+} from "react-icons/bi";
 import { BsPersonFill, BsPerson, BsTwitter } from "react-icons/bs";
 import { FaRegBookmark, FaBookmark } from "react-icons/fa";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
@@ -11,8 +16,8 @@ import { GoSignOut } from "react-icons/go";
 const NavbarContent = ({ profile }) => {
   const pathname = usePathname();
   return (
-    <div className="w-full min-h-full flex flex-col justify-between">
-      <div className="flex xs:flex-col text-2xl xs:text-3xl w-full justify-between border-t xs:border-t-0 items-center xl:items-start gap-8 px-4 py-4">
+    <div className="w-full min-h-full flex flex-col justify-between pb-5">
+      <div className="flex xs:flex-col text-2xl xs:text-3xl w-full justify-around border-t xs:border-t-0 items-center xl:items-start gap-2 xs:gap-8 px-4 py-4">
         <Link className="hidden xs:flex pl-8" href={`/`}>
           <div className="flex gap-2 ">
             <BsTwitter className="" />
@@ -33,11 +38,7 @@ const NavbarContent = ({ profile }) => {
         </Link>
         <Link href="/explore">
           <div className="flex gap-2 items-center hover:bg-gray-700/90 xl:px-6 px-3 py-3 rounded-full">
-            {pathname === "/explore" ? (
-              <BiSolidSearch  />
-            ) : (
-              <BiSearch  />
-            )}
+            {pathname === "/explore" ? <BiSolidSearch /> : <BiSearch />}
             <div className="font-light hidden xl:flex text-2xl">
               <span className={pathname === "/explore" ? "font-bold" : ""}>
                 Explore
@@ -53,8 +54,14 @@ const NavbarContent = ({ profile }) => {
               <AiOutlineHeart />
             )}
             <div className="font-light hidden xl:flex text-2xl">
-                <span className={pathname === `/${profile.username}/likes` ? "font-bold" : ""}>Likes</span>
-                </div>
+              <span
+                className={
+                  pathname === `/${profile.username}/likes` ? "font-bold" : ""
+                }
+              >
+                Likes
+              </span>
+            </div>
           </div>
         </Link>
 
@@ -66,7 +73,15 @@ const NavbarContent = ({ profile }) => {
               <FaRegBookmark />
             )}
             <div className="font-light hidden xl:flex text-2xl">
-                <span className={pathname === `/${profile.username}/bookmarks` ? "font-bold" : ""}>Bookmarks</span>
+              <span
+                className={
+                  pathname === `/${profile.username}/bookmarks`
+                    ? "font-bold"
+                    : ""
+                }
+              >
+                Bookmarks
+              </span>
             </div>
           </div>
         </Link>
@@ -78,12 +93,18 @@ const NavbarContent = ({ profile }) => {
               <BsPerson />
             )}
             <div className="font-light hidden xl:flex text-2xl">
-                <span className={pathname === `/${profile.username}` ? "font-bold" : ""}>Profile</span>
+              <span
+                className={
+                  pathname === `/${profile.username}` ? "font-bold" : ""
+                }
+              >
+                Profile
+              </span>
             </div>
           </div>
         </Link>
       </div>
-      <div className="hidden xs:flex gap-2">
+      <div className="hidden xs:flex gap-2 ">
         <SignOut GoSignOut={GoSignOut} />
       </div>
     </div>

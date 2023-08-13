@@ -3,11 +3,11 @@ import { Inter } from "next/font/google";
 import Navbar from "../components/Navbar";
 import prisma from "@/lib/prisma";
 import GetUserName from "../components/client/getUserName";
+import SignInComponent from "@/components/client/SignInComponent";
 
 import { NextAuthProvider } from "../components/client/SessionProvider";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../lib/auth";
-import { SignIn, SignOut } from "../components/client/buttons";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,13 +15,12 @@ export default async function RootLayout({ children }) {
   const session = await getServerSession(authOptions);
   console.log(session);
   let profile = null;
-  if(session){
+  if (session) {
     profile = await prisma.profile.findUnique({
       where: {
         email: session.user.email,
       },
     });
-
   }
 
   return (
@@ -33,19 +32,17 @@ export default async function RootLayout({ children }) {
               <Navbar />
             </div>
             <div className="max-w-[598px] w-full max-h-screen overflow-y-scroll h-[2000px] sm:border-r  sm:border-l ">
-              {session ? 
-                profile ?
-                children : <GetUserName email={session.user.email} />
-               : (
-                <div className="absolute">
-                  Not signed in <br />
-                  <SignIn provider={"google"} />
-                </div>
+              {session ? (
+                profile ? (
+                  children
+                ) : (
+                  <GetUserName email={session.user.email} />
+                )
+              ) : (
+                <SignInComponent />
               )}
             </div>
-            <div className="hidden sticky max-h-screen  lg:block lg:min-w-[350px]">
-              right
-            </div>
+            <div className="hidden sticky max-h-screen  lg:block lg:min-w-[350px]"></div>
           </div>
         </NextAuthProvider>
       </body>

@@ -3,17 +3,17 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { AiOutlineClose } from "react-icons/ai";
+import { BsTwitter } from "react-icons/bs";
 
 const GetUserName = () => {
   const [userName, setUserName] = useState("");
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [image, setImage] = useState(null);
-  const [url, setUrl] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [error, setError] = useState("");
   const router = useRouter();
-
 
   const getImageUrl = async () => {
     const data = new FormData();
@@ -45,9 +45,10 @@ const GetUserName = () => {
     }
   };
 
-
   const updateUserName = async () => {
-    let url = ''
+    setLoading(true);
+
+    let url = "";
     if (image) {
       url = await getImageUrl();
     }
@@ -55,14 +56,20 @@ const GetUserName = () => {
       setError("Username must be atleast 4 characters long");
       return;
     }
-    console.log(userName, firstname, lastname, url)
+    console.log(userName, firstname, lastname, url);
     const res = await fetch("/api/check", {
       method: "post",
-      body: JSON.stringify({ username: userName.trim(), firstname, lastname, image: url  }),
+      body: JSON.stringify({
+        username: userName.trim(),
+        firstname,
+        lastname,
+        image: url,
+      }),
     });
     const { success, error } = await res.json();
     if (error) {
       setError(error);
+      setLoading(false);
       return;
     }
     console.log(success);
@@ -71,14 +78,22 @@ const GetUserName = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="w-full h-full flex justify-center items-center text-7xl">
+        <BsTwitter size={200} />
+      </div>
+    );
+  }
+
   return (
-    <div className=" ">
-      <form>
-        <h1>Welcome</h1>
-        <div>
+    <div>
+      <form className="flex flex-col gap-10 justify-center items-center w-11/12 border mx-auto h-fit mt-32 rounded-3xl px-10 py-10">
+        <h1 className="text-5xl">Welcome</h1>
+        <div className="flex gap-8 items-center text-xl">
           <label htmlFor="username">Username</label>
           <input
-            className="bg-black border"
+            className="bg-black border px-4 py-2 rounded-lg"
             id="username"
             type="text"
             value={userName}
@@ -86,11 +101,10 @@ const GetUserName = () => {
             placeholder="Username"
           />
         </div>
-        <br />
-        <div>
+        <div className="flex gap-8 items-center text-xl">
           <label htmlFor="firstname">First Name</label>
           <input
-            className="bg-black border"
+            className="bg-black border px-4 py-2 rounded-lg"
             id="firstname"
             type="text"
             placeholder="First Name"
@@ -98,10 +112,10 @@ const GetUserName = () => {
             onChange={(e) => setFirstname(e.target.value)}
           />
         </div>
-        <div>
+        <div className="flex gap-8 items-center text-xl">
           <label htmlFor="lastname">Last Name</label>
           <input
-            className="bg-black border"
+            className="bg-black border px-4 py-2 rounded-lg"
             id="lastname"
             type="text"
             placeholder="Last Name"
@@ -109,7 +123,7 @@ const GetUserName = () => {
             onChange={(e) => setLastname(e.target.value)}
           />
         </div>
-        <div className="">
+        <div className=" flex gap-8 items-center text-xl">
           <input
             id="imageInput"
             type="file"
@@ -117,7 +131,10 @@ const GetUserName = () => {
             className="hidden"
             onChange={(e) => setImage(e.target.files[0])}
           />
-          <label htmlFor="imageInput" className="cursor-pointer">
+          <label
+            htmlFor="imageInput"
+            className="cursor-pointer border  px-4 py-2 rounded-lg"
+          >
             Profile Picture
           </label>
           {image && (
@@ -138,17 +155,20 @@ const GetUserName = () => {
                 height={500}
               ></Image>
             </div>
-          )
-                }
+          )}
         </div>
-        <br />
-        <br />
 
-        <button type="button" onClick={updateUserName}>
+        <button
+          type="button"
+          className="rounded-full border px-20 py-2 text-2xl"
+          onClick={updateUserName}
+        >
           Submit
         </button>
       </form>
-      {error && <div className="text-red-800">{error}</div>}
+      {error && (
+        <div className="text-red-600 text-center mt-10 text-xl">{error}</div>
+      )}
     </div>
   );
 };

@@ -2,6 +2,8 @@
 import Image from "next/image";
 import Post from "@/components/client/Post";
 import BackButton from "./BackButton";
+import { ForceRefresh } from "../ForceRefresh";
+import { signOut } from "next-auth/react";
 
 const ProfilePage = ({ profile, userPosts, sessionUser }) => {
   const months = [
@@ -36,6 +38,7 @@ const ProfilePage = ({ profile, userPosts, sessionUser }) => {
 
   return (
     <div>
+      <ForceRefresh />
       <div className="flex flex-col">
         <div className="flex cursor-pointer">
           <div className="w-12 h-12 flex justify-center items-center">
@@ -61,12 +64,19 @@ const ProfilePage = ({ profile, userPosts, sessionUser }) => {
               </div>
               <div className="flex gap-2">
                 {profile.isSessionUser ? (
-                  <button className="bg-blue-400 text-white border px-4 py-2 font-semibold h-fit rounded-full">
-                    Edit Profile
+                  <button
+                    onClick={() => signOut()}
+                    className="bg-blue-400 text-white border px-4 py-2 font-semibold h-fit rounded-full"
+                  >
+                    Sign Out
                   </button>
-                ) : profile.followers.filter(follower => follower.followerId === sessionUser.id).length > 0 ? (
-                  <button className="bg-black text-white border font-semibold px-4 py-2 h-fit rounded-full" onClick={followUser}>
-                    
+                ) : profile.followers.filter(
+                    (follower) => follower.followerId === sessionUser.id
+                  ).length > 0 ? (
+                  <button
+                    className="bg-black text-white border font-semibold px-4 py-2 h-fit rounded-full"
+                    onClick={followUser}
+                  >
                     Following
                   </button>
                 ) : (

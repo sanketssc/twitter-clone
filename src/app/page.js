@@ -6,6 +6,7 @@ import Post from "../components/client/Post";
 import MobilePost from "../components/client/MobilePost";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { ForceRefresh } from "@/components/ForceRefresh";
 
 export async function generateMetadata() {
   return {
@@ -32,17 +33,18 @@ export default async function Home() {
   const followedIds = followed.map((follow) => {
     return follow.followingId;
   });
-console.log("2",followedIds)
-  const posts = []
-  posts1.forEach((post) => {
-    if(followedIds.includes(post.authorId)){
-      posts.push(post)
-    }
-  });
-  console.log("1",posts)
+  console.log("2", followedIds);
+  const posts = [];
+  // posts1.forEach((post) => {
+  //   if (followedIds.includes(post.authorId)) {
+  //     posts.push(post);
+  //   }
+  // });
+  console.log("1", posts);
 
   return (
     <div className="w-full h-full">
+      <ForceRefresh />
       <Link
         href={"/"}
         className="h-20 z-10 bg-black/60 backdrop-blur-sm fixed w-[37.35rem] border-r border-b px-4 py-2 text-2xl text-white font-bold"
@@ -53,8 +55,8 @@ console.log("2",followedIds)
         <PostInput />
       </div>
       <div className="pt-20 xs:pt-3"></div>
-      {posts &&
-        posts.map(async (post) => {
+      {posts1 &&
+        posts1.map(async (post) => {
           const author = await prisma.profile.findUnique({
             where: { id: post.authorId },
           });
