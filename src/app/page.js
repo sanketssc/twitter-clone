@@ -57,48 +57,68 @@ export default async function Home() {
       <div className="pt-20 xs:pt-3"></div>
       {posts1 &&
         posts1.map(async (post) => {
-          const author = await prisma.profile.findUnique({
+          const authorPromise = prisma.profile.findUnique({
             where: { id: post.authorId },
           });
-          const liked = await prisma.like.findFirst({
+          const likedPromise = prisma.like.findFirst({
             where: {
               userId: profile.id,
               postId: post.id,
             },
           });
-          const bookmarked = await prisma.bookmark.findFirst({
+          const bookmarkedPromise = prisma.bookmark.findFirst({
             where: {
               userId: profile.id,
               postId: post.id,
             },
           });
-          const retweeted = await prisma.retweet.findFirst({
+          const retweetedPromise = prisma.retweet.findFirst({
             where: {
               userId: profile.id,
               postId: post.id,
             },
           });
 
-          const likes = await prisma.like.findMany({
+          const likesPromise = prisma.like.findMany({
             where: {
               postId: post.id,
             },
           });
-          const comments = await prisma.post.findMany({
+          const commentsPromise = prisma.post.findMany({
             where: {
               parentId: post.id,
             },
           });
-          const bookmarks = await prisma.bookmark.findMany({
+          const bookmarksPromise = prisma.bookmark.findMany({
             where: {
               postId: post.id,
             },
           });
-          const retweets = await prisma.retweet.findMany({
+          const retweetsPromise = prisma.retweet.findMany({
             where: {
               postId: post.id,
             },
           });
+
+          const [
+            author,
+            liked,
+            bookmarked,
+            retweeted,
+            likes,
+            comments,
+            bookmarks,
+            retweets,
+          ] = await Promise.all([
+            authorPromise,
+            likedPromise,
+            bookmarkedPromise,
+            retweetedPromise,
+            likesPromise,
+            commentsPromise,
+            bookmarksPromise,
+            retweetsPromise,
+          ]);
           post.retweets = retweets;
           post.likes = likes;
           post.comments = comments;
